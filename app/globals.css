@@ -13,9 +13,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-playfair);
-  --font-mono: var(--font-jetbrains);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
@@ -30,7 +30,13 @@
 @layer base {
   * {
     @apply border-muted;
-    cursor: none;
+  }
+  
+  /* Custom cursor only on devices with hover capability */
+  @media (hover: hover) {
+    * {
+      cursor: none;
+    }
   }
   
   html {
@@ -70,23 +76,32 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
-/* Custom cursor styles */
-.cursor-dot {
-  width: 12px;
-  height: 12px;
-  background-color: var(--foreground);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out;
+/* Custom cursor styles - only on hover-capable devices */
+@media (hover: hover) {
+  .cursor-dot {
+    width: 12px;
+    height: 12px;
+    background-color: var(--foreground);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out;
+  }
+
+  .cursor-dot.hovering {
+    width: 40px;
+    height: 40px;
+  }
 }
 
-.cursor-dot.hovering {
-  width: 40px;
-  height: 40px;
+/* Hide cursor on touch devices */
+@media (hover: none) {
+  .cursor-dot {
+    display: none !important;
+  }
 }
 
 /* Horizontal scroll section */
@@ -123,4 +138,56 @@ html.lenis, html.lenis body {
 
 .letterbox.cropped {
   clip-path: inset(35% 0 35% 0);
+}
+
+/* Display font settings */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Section progress line */
+.section-progress {
+  height: 1px;
+  background-color: var(--muted);
+  position: relative;
+}
+
+.section-progress::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: var(--foreground);
+  transition: width 0.3s ease-out;
+}
+
+/* Menu overlay animation */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.menu-link-animate {
+  animation: slideInFromRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+/* Will-change utility for performance */
+.will-change-transform {
+  will-change: transform;
 }

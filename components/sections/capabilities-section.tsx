@@ -1,66 +1,120 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const statements = [
-  'We are a content studio.',
-  'We are a brand partner.',
-  'We are a creative direction studio.',
-  'We are a marketing engine.',
-  'We are Voyage.',
+  'We make films.',
+  'We make films that sell rooms.',
+  'We make brands.',
+  'We make brands that outlast trends.',
+  'We make Voyage.',
 ]
 
 const backgroundImages = [
-  'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1606402179428-a57976d71fa4?auto=format&fit=crop&w=1920&q=80',
+  'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=75',
+  'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1920&q=75',
+  'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1920&q=75',
+  'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=1920&q=75',
+  'https://images.unsplash.com/photo-1606402179428-a57976d71fa4?auto=format&fit=crop&w=1920&q=75',
 ]
 
 export function CapabilitiesSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const textRef = useRef<HTMLDivElement>(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [displayText, setDisplayText] = useState(statements[0])
+  const textContainerRef = useRef<HTMLDivElement>(null)
+  const counterRef = useRef<HTMLSpanElement>(null)
+  const bgRefs = useRef<(HTMLDivElement | null)[]>([])
+  const progressRefs = useRef<(HTMLDivElement | null)[]>([])
+  const currentIndexRef = useRef(0)
+
+  // Build character spans imperatively
+  const buildCharacterSpans = (text: string) => {
+    const container = textContainerRef.current
+    if (!container) return
+
+    container.innerHTML = ''
+    text.split('').forEach((char) => {
+      const span = document.createElement('span')
+      span.className = 'morph-char inline-block'
+      span.textContent = char === ' ' ? '\u00A0' : char
+      span.style.opacity = '1'
+      span.style.transform = 'translateY(0)'
+      container.appendChild(span)
+    })
+  }
 
   useEffect(() => {
     const section = sectionRef.current
-    const textEl = textRef.current
-    if (!section || !textEl) return
+    const textContainer = textContainerRef.current
+    const counter = counterRef.current
+    if (!section || !textContainer || !counter) return
+
+    // Initial build
+    buildCharacterSpans(statements[0])
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: `+=${statements.length * 400}`,
+        end: `+=${statements.length * 600}`,
         pin: true,
         scrub: 0.5,
         onUpdate: (self) => {
           const progress = self.progress
-          const index = Math.min(
+          const targetIndex = Math.min(
             Math.floor(progress * statements.length),
             statements.length - 1
           )
-          
-          if (index !== currentIndex) {
-            setCurrentIndex(index)
-            
-            // Animate character morph
-            const targetText = statements[index]
-            const chars = textEl.querySelectorAll('.morph-char')
-            
-            gsap.to(chars, {
+
+          if (targetIndex !== currentIndexRef.current) {
+            const prevIndex = currentIndexRef.current
+            currentIndexRef.current = targetIndex
+
+            // Update counter
+            counter.textContent = `0${targetIndex + 1} / 0${statements.length}`
+
+            // Cross-fade background images
+            bgRefs.current.forEach((bg, i) => {
+              if (bg) {
+                bg.style.opacity = i === targetIndex ? '0.3' : '0'
+              }
+            })
+
+            // Update progress indicators
+            progressRefs.current.forEach((bar, i) => {
+              if (bar) {
+                bar.style.backgroundColor = i <= targetIndex ? '#C2412E' : '#3A3A38'
+              }
+            })
+
+            // Morph animation: fade out current characters
+            const currentChars = textContainer.querySelectorAll('.morph-char')
+            gsap.to(currentChars, {
+              y: -20,
               opacity: 0,
-              y: -10,
-              duration: 0.15,
-              stagger: 0.01,
+              duration: 0.3,
+              stagger: 0.02,
+              ease: 'power2.in',
               onComplete: () => {
-                setDisplayText(targetText)
+                // Swap text in DOM directly
+                buildCharacterSpans(statements[targetIndex])
+
+                // Fade in new characters
+                const newChars = textContainer.querySelectorAll('.morph-char')
+                gsap.fromTo(
+                  newChars,
+                  { y: 20, opacity: 0 },
+                  {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.3,
+                    stagger: 0.02,
+                    ease: 'power2.out',
+                  }
+                )
               },
             })
           }
@@ -69,74 +123,69 @@ export function CapabilitiesSection() {
     }, section)
 
     return () => ctx.revert()
-  }, [currentIndex])
-
-  useEffect(() => {
-    const textEl = textRef.current
-    if (!textEl) return
-
-    const chars = textEl.querySelectorAll('.morph-char')
-    gsap.fromTo(
-      chars,
-      { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: 0.15, stagger: 0.01 }
-    )
-  }, [displayText])
+  }, [])
 
   return (
     <section
       ref={sectionRef}
       id="section-03"
+      aria-label="Capabilities"
       className="relative h-screen w-full overflow-hidden bg-background"
     >
-      {/* Background images */}
+      {/* Background images with cross-fade */}
       {backgroundImages.map((img, index) => (
         <div
           key={index}
-          className="absolute inset-0 transition-opacity duration-700"
-          style={{ opacity: currentIndex === index ? 0.3 : 0 }}
+          ref={(el) => { bgRefs.current[index] = el }}
+          className="absolute inset-0"
+          style={{ 
+            opacity: index === 0 ? 0.3 : 0,
+            transition: 'opacity 1200ms ease-out',
+          }}
         >
           <img
             src={img}
             alt=""
+            aria-hidden="true"
             className="w-full h-full object-cover"
+            loading="lazy"
             style={{
-              transform: `translateX(${(currentIndex - index) * -5}%)`,
-              transition: 'transform 2s ease-out',
+              transform: 'scale(1.1)',
+              transition: 'transform 3s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           />
         </div>
       ))}
 
-      {/* Section number */}
-      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10">
-        <span className="font-mono text-xs tracking-widest text-muted-foreground">
-          03 / CAPABILITIES
+      {/* Counter - top right of morphing text area */}
+      <div className="absolute top-8 right-8 md:top-12 md:right-16">
+        <span 
+          ref={counterRef}
+          className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground"
+        >
+          01 / 05
         </span>
       </div>
 
       {/* Morphing statement */}
       <div className="absolute inset-0 flex items-center justify-center px-6">
         <div
-          ref={textRef}
-          className="font-serif text-[7vw] md:text-[5vw] lg:text-[4vw] text-foreground text-center leading-tight"
-        >
-          {displayText.split('').map((char, index) => (
-            <span key={`${displayText}-${index}`} className="morph-char inline-block">
-              {char === ' ' ? '\u00A0' : char}
-            </span>
-          ))}
-        </div>
+          ref={textContainerRef}
+          className="font-display text-[10vw] md:text-[6vw] lg:text-[5vw] text-foreground text-center leading-[0.95] tracking-[-0.02em] font-semibold max-w-[90vw]"
+          style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
+          aria-live="polite"
+        />
       </div>
 
-      {/* Progress indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+      {/* Progress indicator - hidden on mobile */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex gap-2">
         {statements.map((_, index) => (
           <div
             key={index}
-            className="w-8 h-px transition-colors duration-300"
+            ref={(el) => { progressRefs.current[index] = el }}
+            className="w-8 h-px transition-colors duration-500"
             style={{
-              backgroundColor: currentIndex >= index ? '#C2412E' : '#3A3A38',
+              backgroundColor: index === 0 ? '#C2412E' : '#3A3A38',
             }}
           />
         ))}

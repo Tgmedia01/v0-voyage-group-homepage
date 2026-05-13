@@ -1,15 +1,16 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, CSSProperties } from 'react'
 import gsap from 'gsap'
 
 interface TypewriterTextProps {
   text: string
   delay?: number
   className?: string
+  style?: CSSProperties
 }
 
-export function TypewriterText({ text, delay = 800, className = '' }: TypewriterTextProps) {
+export function TypewriterText({ text, delay = 800, className = '', style }: TypewriterTextProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -39,11 +40,11 @@ export function TypewriterText({ text, delay = 800, className = '' }: Typewriter
   }, [isVisible])
 
   if (!isVisible) {
-    return <div className={className} style={{ visibility: 'hidden' }}>{text}</div>
+    return <div className={className} style={{ ...style, visibility: 'hidden' }}>{text}</div>
   }
 
   return (
-    <div ref={containerRef} className={className}>
+    <div ref={containerRef} className={className} style={style}>
       {text.split('').map((char, index) => (
         <span key={index} className="char opacity-0">
           {char === ' ' ? '\u00A0' : char}

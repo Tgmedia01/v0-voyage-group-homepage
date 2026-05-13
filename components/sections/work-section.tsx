@@ -1,8 +1,9 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Image from 'next/image'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -13,8 +14,8 @@ const projects = [
     client: 'Maison de Luxe',
     location: 'Paris, France',
     year: '2024',
-    deliverables: ['Brand Film', 'Photography', 'Social Content'],
-    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80',
+    scope: 'Brand Film / Photography / Social Content',
+    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1920&q=75',
   },
   {
     id: '02',
@@ -22,8 +23,8 @@ const projects = [
     client: 'Costa Luxury Resorts',
     location: 'Positano, Italy',
     year: '2024',
-    deliverables: ['Campaign', 'Direction', 'Edit'],
-    image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1200&q=80',
+    scope: 'Campaign / Direction / Edit',
+    image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1920&q=75',
   },
   {
     id: '03',
@@ -31,8 +32,8 @@ const projects = [
     client: 'Fjord Hotels',
     location: 'Bergen, Norway',
     year: '2023',
-    deliverables: ['Documentary', 'Stills', 'Brand'],
-    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80',
+    scope: 'Documentary / Stills / Brand',
+    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1920&q=75',
   },
   {
     id: '04',
@@ -40,8 +41,8 @@ const projects = [
     client: 'Sahara Collection',
     location: 'Marrakech, Morocco',
     year: '2023',
-    deliverables: ['Film', 'Art Direction', 'Content'],
-    image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=80',
+    scope: 'Film / Art Direction / Content',
+    image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1920&q=75',
   },
 ]
 
@@ -49,11 +50,22 @@ export function WorkSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const titlesRef = useRef<(HTMLDivElement | null)[]>([])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    // Check for mobile on mount and resize
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const section = sectionRef.current
     const container = containerRef.current
-    if (!section || !container) return
+    if (!section || !container || isMobile) return
 
     const ctx = gsap.context(() => {
       const totalWidth = container.scrollWidth - window.innerWidth
@@ -72,11 +84,12 @@ export function WorkSection() {
         },
       })
 
-      // Parallax effect on project titles
+      // Parallax effect on project titles - increased to -300
       titlesRef.current.forEach((title) => {
         if (title) {
+          title.style.willChange = 'transform'
           gsap.to(title, {
-            x: -100,
+            x: -300,
             ease: 'none',
             scrollTrigger: {
               trigger: section,
@@ -84,6 +97,8 @@ export function WorkSection() {
               end: `+=${totalWidth}`,
               scrub: 1,
               containerAnimation: scrollTween,
+              onLeave: () => { if (title) title.style.willChange = 'auto' },
+              onLeaveBack: () => { if (title) title.style.willChange = 'auto' },
             },
           })
         }
@@ -91,20 +106,72 @@ export function WorkSection() {
     }, section)
 
     return () => ctx.revert()
-  }, [])
+  }, [isMobile])
 
+  // Mobile: Vertical stack layout
+  if (isMobile) {
+    return (
+      <section
+        ref={sectionRef}
+        id="section-02"
+        aria-label="Selected Work"
+        className="relative bg-background py-24"
+      >
+        {/* Section header */}
+        <div className="px-6 mb-16">
+          <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+            02 / SELECTED WORK
+          </span>
+        </div>
+
+        {/* Vertical project stack */}
+        <div className="space-y-24">
+          {projects.map((project) => (
+            <article key={project.id} className="relative px-6">
+              {/* Project name - massive, overlapping */}
+              <h2 
+                className="font-display text-[20vw] leading-[0.95] tracking-[-0.02em] font-semibold text-foreground relative z-10 -mb-[8vw]"
+                style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
+              >
+                {project.name}
+              </h2>
+
+              {/* Image */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={`${project.name} — ${project.client}`}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Credits strip below image */}
+              <div className="mt-6 font-mono text-[10px] tracking-[0.1em] text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
+                <span>{project.client}</span>
+                <span className="text-muted">/</span>
+                <span>{project.location}</span>
+                <span className="text-muted">/</span>
+                <span>{project.year}</span>
+                <span className="text-muted">/</span>
+                <span>{project.scope}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  // Desktop: Horizontal scroll layout
   return (
     <section
       ref={sectionRef}
       id="section-02"
+      aria-label="Selected Work"
       className="relative overflow-hidden bg-background"
     >
-      {/* Section header */}
-      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10">
-        <span className="font-mono text-xs tracking-widest text-muted-foreground">
-          02 / SELECTED WORK
-        </span>
-      </div>
+
 
       {/* Horizontal scroll container */}
       <div
@@ -112,64 +179,46 @@ export function WorkSection() {
         className="horizontal-scroll-container h-screen"
       >
         {projects.map((project, index) => (
-          <div
+          <article
             key={project.id}
-            className="flex-shrink-0 w-screen h-screen flex items-center px-6 md:px-16"
+            className="flex-shrink-0 w-screen h-screen relative flex items-center justify-center"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 w-full max-w-7xl mx-auto">
-              {/* Image */}
-              <div className="relative aspect-[4/3] lg:aspect-[3/4] overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+            {/* Image - 60% of frame */}
+            <div className="relative w-[60vw] h-[70vh] overflow-hidden">
+              <img
+                src={project.image}
+                alt={`${project.name} — ${project.client}`}
+                className="w-full h-full object-cover"
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
 
-              {/* Metadata */}
-              <div className="flex flex-col justify-center lg:pl-8">
-                {/* Project number */}
-                <span className="font-mono text-xs tracking-widest text-muted-foreground mb-4">
-                  {project.id} / {String(projects.length).padStart(2, '0')}
-                </span>
+            {/* Project name - massive, overlapping image */}
+            <div
+              ref={(el) => { titlesRef.current[index] = el }}
+              className="absolute left-8 md:left-16 bottom-[20vh]"
+            >
+              <h2 
+                className="font-display text-[16vw] md:text-[14vw] lg:text-[12vw] leading-[0.95] tracking-[-0.02em] font-semibold text-foreground"
+                style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
+              >
+                {project.name}
+              </h2>
+            </div>
 
-                {/* Project name with parallax */}
-                <div
-                  ref={(el) => { titlesRef.current[index] = el }}
-                  className="overflow-hidden"
-                >
-                  <h3 className="font-serif text-[12vw] lg:text-[8vw] leading-none text-foreground">
-                    {project.name}
-                  </h3>
-                </div>
-
-                {/* Credits block */}
-                <div className="mt-8 lg:mt-12 space-y-3 font-mono text-xs tracking-wide">
-                  <div className="flex">
-                    <span className="text-muted-foreground w-24">CLIENT</span>
-                    <span className="text-foreground">{project.client}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-muted-foreground w-24">LOCATION</span>
-                    <span className="text-foreground">{project.location}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-muted-foreground w-24">YEAR</span>
-                    <span className="text-foreground">{project.year}</span>
-                  </div>
-                  <div className="flex">
-                    <span className="text-muted-foreground w-24">SCOPE</span>
-                    <span className="text-foreground">
-                      {project.deliverables.join(' / ')}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Accent line */}
-                <div className="mt-8 w-12 h-px bg-accent" />
+            {/* Credits strip below image */}
+            <div className="absolute bottom-8 left-8 right-8 md:left-16 md:right-16">
+              <div className="font-mono text-[10px] tracking-[0.15em] text-muted-foreground flex items-center gap-6">
+                <span>{project.client}</span>
+                <span className="text-muted">|</span>
+                <span>{project.location}</span>
+                <span className="text-muted">|</span>
+                <span>{project.year}</span>
+                <span className="text-muted">|</span>
+                <span>{project.scope}</span>
               </div>
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </section>

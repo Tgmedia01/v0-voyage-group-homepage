@@ -27,58 +27,73 @@ export function DepartureSection() {
   return (
     <section
       id="section-04"
+      aria-label="Departure — Contact"
       className="relative h-screen w-full overflow-hidden"
     >
       {/* Full-bleed background image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1615460549969-36fa19521a4f?auto=format&fit=crop&w=1920&q=80"
-          alt="Luxury hospitality interior"
+          src="https://images.unsplash.com/photo-1615460549969-36fa19521a4f?auto=format&fit=crop&w=1920&q=75"
+          alt=""
+          aria-hidden="true"
           className="w-full h-full object-cover"
+          loading="lazy"
         />
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-background/60" />
+        {/* Dark overlay - reduced to 40% */}
+        <div className="absolute inset-0 bg-background/40" />
       </div>
 
-      {/* Section number */}
-      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10">
-        <span className="font-mono text-xs tracking-widest text-muted-foreground">
-          04 / DEPARTURE
-        </span>
-      </div>
+
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
-        <h2 className="font-serif text-[8vw] md:text-[5vw] lg:text-[4vw] text-foreground text-center mb-12">
+        <h2 
+          className="font-display text-[14vw] md:text-[7vw] lg:text-[6vw] text-foreground text-center leading-[0.95] tracking-[-0.02em] font-semibold mb-16"
+          style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
+        >
           Begin the next chapter.
         </h2>
 
+        {/* Email button */}
         <button
           onClick={handleCopyEmail}
-          className="group relative font-mono text-sm tracking-widest text-foreground hover:text-accent transition-colors"
+          className="group relative font-mono text-[10px] md:text-xs tracking-[0.2em] text-foreground hover:text-accent transition-colors duration-300"
           data-cursor-hover
         >
-          <span className={copied ? 'opacity-0' : 'opacity-100'}>
-            {email}
+          <span className={`transition-opacity duration-300 ${copied ? 'opacity-0' : 'opacity-100'}`}>
+            {email.toUpperCase()}
           </span>
           <span
-            className={`absolute inset-0 flex items-center justify-center transition-opacity ${
+            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
               copied ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            copied
+            COPIED
           </span>
         </button>
+
+        {/* Or divider and calendar link */}
+        <div className="mt-8 flex flex-col items-center gap-4">
+          <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground">
+            OR
+          </span>
+          <a
+            href="https://calendly.com/voyage"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[10px] md:text-xs tracking-[0.2em] text-foreground hover:text-accent transition-colors duration-300"
+            data-cursor-hover
+          >
+            BOOK A CALL — CALENDLY.COM/VOYAGE
+          </a>
+        </div>
       </div>
 
       {/* Footer */}
       <footer className="absolute bottom-6 left-0 right-0 px-6 md:px-8">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-xs tracking-widest text-muted-foreground">
-            Voyage. — A studio for hospitality.
-          </span>
-          <span className="font-mono text-xs tracking-widest text-muted-foreground">
-            2024
+        <div className="flex items-center justify-center">
+          <span className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+            VOYAGE — INDEX 2026
           </span>
         </div>
       </footer>
