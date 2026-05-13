@@ -39,7 +39,7 @@ export function ThresholdSection() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: `+=${words.length * 100}`,
+          end: `+=${words.length * 60}`,
           pin: true,
           scrub: 0.5,
         },

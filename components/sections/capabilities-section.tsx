@@ -27,6 +27,7 @@ export function CapabilitiesSection() {
   const textRef = useRef<HTMLDivElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [displayText, setDisplayText] = useState(statements[0])
+  const lastIndexRef = useRef(0)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -37,7 +38,7 @@ export function CapabilitiesSection() {
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: `+=${statements.length * 400}`,
+        end: `+=${statements.length * 200}`,
         pin: true,
         scrub: 0.5,
         onUpdate: (self) => {
@@ -47,7 +48,8 @@ export function CapabilitiesSection() {
             statements.length - 1
           )
           
-          if (index !== currentIndex) {
+          if (index !== lastIndexRef.current) {
+            lastIndexRef.current = index
             setCurrentIndex(index)
             
             // Animate character morph
@@ -70,7 +72,7 @@ export function CapabilitiesSection() {
     }, section)
 
     return () => ctx.revert()
-  }, [currentIndex])
+  }, []) // Empty dependency array - only run once
 
   useEffect(() => {
     const textEl = textRef.current

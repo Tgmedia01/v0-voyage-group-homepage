@@ -23,11 +23,11 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     // Don't initialize Lenis on touch devices - native momentum is better
     if (isTouch) return
 
-    // Initialize Lenis with slow pacing
+    // Initialize Lenis with smooth pacing
     const lenis = new Lenis({
-      lerp: 0.08, // Lower = slower/smoother
+      lerp: 0.1,
       smoothWheel: true,
-      wheelMultiplier: 0.8, // Slower scroll speed
+      wheelMultiplier: 1.0, // Keep at 1 to not interfere with GSAP ScrollTrigger calculations
     })
 
     lenisRef.current = lenis
