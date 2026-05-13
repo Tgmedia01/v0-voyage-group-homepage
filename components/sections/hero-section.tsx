@@ -4,7 +4,6 @@ import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Image from 'next/image'
-import { Timecode } from '@/components/timecode'
 import { TypewriterText } from '@/components/typewriter-text'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -73,14 +72,16 @@ export function HeroSection() {
         <TypewriterText
           text="We make hospitality unforgettable."
           delay={800}
-          className="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] text-foreground text-center leading-[0.95] tracking-[-0.04em] font-medium"
-          style={{ fontVariationSettings: "'wdth' 85, 'opsz' 96" }}
+          className="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] text-foreground text-center leading-[0.92] tracking-[-0.045em] font-bold"
+          style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
         />
       </div>
 
-      {/* Bottom Left - Timecode */}
+      {/* Bottom Left - Establishment label */}
       <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8">
-        <Timecode />
+        <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+          VOYAGE — EST. WARWICK 2024
+        </span>
       </div>
 
       {/* Bottom Right - Section Indicator - hidden on mobile */}

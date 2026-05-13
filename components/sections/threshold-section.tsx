@@ -109,8 +109,8 @@ export function ThresholdSection() {
       {/* Word-by-word statement - positioned in lower-left quadrant */}
       <div className="w-full max-w-4xl px-6 md:px-16 lg:px-24">
         <p 
-          className="font-display text-[10vw] md:text-[6vw] lg:text-[5vw] leading-[0.95] tracking-[-0.04em] font-medium text-foreground"
-          style={{ fontVariationSettings: "'wdth' 85, 'opsz' 96" }}
+          className="font-display text-[10vw] md:text-[6vw] lg:text-[5vw] leading-[0.92] tracking-[-0.045em] font-bold text-foreground"
+          style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
         >
           {words.map((word, index) => (
             <span
