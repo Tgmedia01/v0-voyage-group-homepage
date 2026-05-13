@@ -72,16 +72,9 @@ export function HeroSection() {
         <TypewriterText
           text="We make hospitality unforgettable."
           delay={800}
-          className="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] text-foreground text-center leading-[0.92] tracking-[-0.045em] font-bold"
-          style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
+          className="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] text-foreground text-center leading-[0.95] tracking-[-0.02em] font-semibold"
+          style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
         />
-      </div>
-
-      {/* Bottom Left - Establishment label */}
-      <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-          VOYAGE — EST. WARWICK 2024
-        </span>
       </div>
 
       {/* Bottom Right - Section Indicator - hidden on mobile */}

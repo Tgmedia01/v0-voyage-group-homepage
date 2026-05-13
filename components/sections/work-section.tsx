@@ -130,8 +130,8 @@ export function WorkSection() {
             <article key={project.id} className="relative px-6">
               {/* Project name - massive, overlapping */}
               <h2 
-                className="font-display text-[20vw] leading-[0.92] tracking-[-0.045em] font-bold text-foreground relative z-10 -mb-[8vw]"
-                style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
+                className="font-display text-[20vw] leading-[0.95] tracking-[-0.02em] font-semibold text-foreground relative z-10 -mb-[8vw]"
+                style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
               >
                 {project.name}
               </h2>
@@ -199,8 +199,8 @@ export function WorkSection() {
               className="absolute left-8 md:left-16 bottom-[20vh]"
             >
               <h2 
-                className="font-display text-[16vw] md:text-[14vw] lg:text-[12vw] leading-[0.92] tracking-[-0.045em] font-bold text-foreground"
-                style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
+                className="font-display text-[16vw] md:text-[14vw] lg:text-[12vw] leading-[0.95] tracking-[-0.02em] font-semibold text-foreground"
+                style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
               >
                 {project.name}
               </h2>

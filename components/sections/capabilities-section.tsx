@@ -171,8 +171,8 @@ export function CapabilitiesSection() {
       <div className="absolute inset-0 flex items-center justify-center px-6">
         <div
           ref={textContainerRef}
-          className="font-display text-[10vw] md:text-[6vw] lg:text-[5vw] text-foreground text-center leading-[0.92] tracking-[-0.045em] font-bold max-w-[90vw]"
-          style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
+          className="font-display text-[10vw] md:text-[6vw] lg:text-[5vw] text-foreground text-center leading-[0.95] tracking-[-0.02em] font-semibold max-w-[90vw]"
+          style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
           aria-live="polite"
         />
       </div>

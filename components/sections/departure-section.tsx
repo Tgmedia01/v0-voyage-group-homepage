@@ -48,8 +48,8 @@ export function DepartureSection() {
       {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
         <h2 
-          className="font-display text-[14vw] md:text-[7vw] lg:text-[6vw] text-foreground text-center leading-[0.92] tracking-[-0.045em] font-bold mb-16"
-          style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
+          className="font-display text-[14vw] md:text-[7vw] lg:text-[6vw] text-foreground text-center leading-[0.95] tracking-[-0.02em] font-semibold mb-16"
+          style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
         >
           Begin the next chapter.
         </h2>

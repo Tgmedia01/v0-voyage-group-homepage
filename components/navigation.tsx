@@ -155,8 +155,8 @@ export function Navigation() {
           {/* Logo - top left */}
           <a 
             href="#" 
-            className="font-display text-lg md:text-xl tracking-[-0.02em] text-foreground font-bold pointer-events-auto"
-            style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
+            className="font-display text-lg md:text-xl tracking-[-0.02em] text-foreground font-semibold pointer-events-auto"
+            style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
             data-cursor-hover
           >
             VOYAGE
@@ -243,8 +243,8 @@ export function Navigation() {
                     
                     {/* Link text */}
                     <span 
-                      className="font-display text-[16vw] md:text-[11vw] leading-[1.1] tracking-[-0.045em] font-bold text-foreground"
-                      style={{ fontVariationSettings: "'wdth' 80, 'opsz' 96" }}
+                      className="font-display text-[16vw] md:text-[11vw] leading-[1.1] tracking-[-0.02em] font-semibold text-foreground"
+                      style={{ fontVariationSettings: "'wdth' 100, 'opsz' 96" }}
                     >
                       {link.name}
                     </span>
