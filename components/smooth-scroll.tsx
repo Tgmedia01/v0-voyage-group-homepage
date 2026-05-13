@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Lenis from '@studio-freight/lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -13,9 +13,17 @@ interface SmoothScrollProps {
 
 export function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
 
   useEffect(() => {
-    // Initialize Lenis with slow pacing (1.2 multiplier via lerp)
+    // Detect touch device
+    const isTouch = window.matchMedia('(hover: none)').matches
+    setIsTouchDevice(isTouch)
+
+    // Don't initialize Lenis on touch devices - native momentum is better
+    if (isTouch) return
+
+    // Initialize Lenis with slow pacing
     const lenis = new Lenis({
       lerp: 0.08, // Lower = slower/smoother
       smoothWheel: true,

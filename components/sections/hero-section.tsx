@@ -3,6 +3,7 @@
 import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Image from 'next/image'
 import { Timecode } from '@/components/timecode'
 import { TypewriterText } from '@/components/typewriter-text'
 
@@ -28,6 +29,7 @@ export function HeroSection() {
           const progress = self.progress
           const inset = progress * 35 // Crop to 35% from top and bottom
           video.style.clipPath = `inset(${inset}% 0 ${inset}% 0)`
+          video.style.willChange = progress > 0 && progress < 1 ? 'clip-path' : 'auto'
         },
       })
     }, section)
@@ -39,6 +41,7 @@ export function HeroSection() {
     <section
       ref={sectionRef}
       id="section-00"
+      aria-label="Arrival — Welcome to Voyage"
       className="relative h-screen w-full overflow-hidden"
     >
       {/* Video Background */}
@@ -51,8 +54,9 @@ export function HeroSection() {
           muted
           loop
           playsInline
+          preload="metadata"
           className="h-full w-full object-cover"
-          poster="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=80"
+          poster="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&q=75"
         >
           <source
             src="https://assets.mixkit.co/videos/preview/mixkit-luxury-hotel-lobby-interior-4802-large.mp4"
@@ -65,10 +69,12 @@ export function HeroSection() {
 
       {/* Main Headline - Types in after 800ms */}
       <div className="absolute inset-0 flex items-center justify-center px-6">
+        <h1 className="sr-only">We make hospitality unforgettable — Voyage, a studio for hospitality brands</h1>
         <TypewriterText
           text="We make hospitality unforgettable."
           delay={800}
-          className="font-serif text-[8vw] md:text-[6vw] lg:text-[5vw] text-foreground text-center leading-tight"
+          className="font-display text-[14vw] md:text-[8vw] lg:text-[7vw] text-foreground text-center leading-[0.95] tracking-[-0.04em] font-medium"
+          style={{ fontVariationSettings: "'wdth' 85, 'opsz' 96" }}
         />
       </div>
 
@@ -77,12 +83,12 @@ export function HeroSection() {
         <Timecode />
       </div>
 
-      {/* Bottom Right - Section Indicator */}
-      <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 text-right">
-        <div className="font-mono text-xs tracking-widest text-foreground">
+      {/* Bottom Right - Section Indicator - hidden on mobile */}
+      <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 text-right hidden sm:block">
+        <div className="font-mono text-[10px] tracking-[0.2em] text-foreground">
           00 / 04
         </div>
-        <div className="font-mono text-xs tracking-widest text-muted-foreground uppercase mt-1">
+        <div className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase mt-1">
           ARRIVAL
         </div>
       </div>
