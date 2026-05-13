@@ -171,12 +171,7 @@ export function WorkSection() {
       aria-label="Selected Work"
       className="relative overflow-hidden bg-background"
     >
-      {/* Section header - hidden on mobile */}
-      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 hidden sm:block">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-          02 / SELECTED WORK
-        </span>
-      </div>
+
 
       {/* Horizontal scroll container */}
       <div

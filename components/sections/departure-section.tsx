@@ -43,12 +43,7 @@ export function DepartureSection() {
         <div className="absolute inset-0 bg-background/40" />
       </div>
 
-      {/* Section number - hidden on mobile */}
-      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 hidden sm:block">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-          04 / DEPARTURE
-        </span>
-      </div>
+
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center px-6">

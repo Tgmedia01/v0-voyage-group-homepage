@@ -30,30 +30,44 @@ export function Navigation() {
   const linksRef = useRef<(HTMLAnchorElement | null)[]>([])
 
   useEffect(() => {
+    // Use Intersection Observer for accurate section tracking with pinned sections
+    const sectionElements = sections.map(s => document.querySelector(s.href.replace('#', '#')))
+    
+    const observers: IntersectionObserver[] = []
+    
+    sections.forEach((section, index) => {
+      const element = document.querySelector(`#section-${section.id}`)
+      if (!element) return
+      
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+              setCurrentSection(section)
+            }
+          })
+        },
+        { threshold: [0.3, 0.5, 0.7], rootMargin: '-10% 0px -10% 0px' }
+      )
+      
+      observer.observe(element)
+      observers.push(observer)
+    })
+
+    // Simple progress based on overall scroll
     const handleScroll = () => {
       const scrollY = window.scrollY
-      const windowHeight = window.innerHeight
-      const docHeight = document.documentElement.scrollHeight
-
-      // Calculate which section we're in based on scroll position
-      const sectionIndex = Math.min(
-        Math.floor(scrollY / windowHeight),
-        sections.length - 1
-      )
-      setCurrentSection(sections[Math.max(0, sectionIndex)])
-
-      // Calculate progress within current section
-      const sectionStart = sectionIndex * windowHeight
-      const sectionEnd = Math.min((sectionIndex + 1) * windowHeight, docHeight)
-      const progress = Math.min(
-        Math.max((scrollY - sectionStart) / (sectionEnd - sectionStart), 0),
-        1
-      )
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const progress = Math.min(scrollY / docHeight, 1)
       setSectionProgress(progress)
     }
 
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    
+    return () => {
+      observers.forEach(obs => obs.disconnect())
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   useEffect(() => {

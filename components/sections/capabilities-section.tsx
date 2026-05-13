@@ -127,12 +127,7 @@ export function CapabilitiesSection() {
         </div>
       ))}
 
-      {/* Section number - hidden on mobile */}
-      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 hidden sm:block">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-          03 / CAPABILITIES
-        </span>
-      </div>
+
 
       {/* Morphing statement */}
       <div className="absolute inset-0 flex items-center justify-center px-6">
